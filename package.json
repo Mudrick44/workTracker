@@ -1,0 +1,9 @@
+{
+  "name": "work-tracker",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Minimal NFC-tap work time tracker, deployed on Vercel with Upstash Redis.",
+  "dependencies": {
+    "@upstash/redis": "^1.34.0"
+  }
+}
