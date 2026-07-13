@@ -4,7 +4,13 @@ A tiny personal work-time tracker. Tap an NFC tag against your phone, it opens
 a URL, and that URL toggles you between "working" and "not working" while
 showing today's total hours.
 
-One endpoint: `GET /api/tap?key=SECRET`
+Two endpoints:
+
+- `GET /api/tap?key=SECRET` - the one the NFC tag opens. Toggles start/stop
+  and shows today's total.
+- `GET /api/history?key=SECRET` - a read-only list of past days, each
+  expandable to show the raw start/stop timestamps logged that day. Linked
+  from the bottom of the tap page, or bookmark it directly.
 
 ## How it works
 
@@ -15,8 +21,12 @@ One endpoint: `GET /api/tap?key=SECRET`
   "start" → log "stop".
 - After logging, it adds up all complete start→stop pairs that happened
   today (Europe/Berlin time) and shows the total.
-- If the `key` query param is missing or wrong, it just returns a plain
-  "Not Found" page - no hint that anything special lives there.
+- `/api/history` reads the same log, groups it by day, and shows the last 14
+  days that have any logged time. It never writes anything, so opening or
+  reloading it is always safe (unlike `/api/tap`, which always toggles).
+- If the `key` query param is missing or wrong on either endpoint, it just
+  returns a plain "Not Found" page - no hint that anything special lives
+  there.
 
 ## Setup
 
@@ -64,10 +74,12 @@ browser, toggles your work state, and shows a big, glanceable summary.
 ## Tweaking things yourself
 
 - **Timezone**: change the `TIMEZONE` constant at the top of `api/tap.js`
-  (uses standard IANA timezone names, e.g. `"America/New_York"`).
-- **Look and feel**: edit `lib/page.js` - it's plain HTML/CSS in a template
-  string (colors, copy, layout all live there, separate from the Redis/date
-  logic in `api/tap.js`).
+  *and* `api/history.js` (uses standard IANA timezone names, e.g.
+  `"America/New_York"`).
+- **Colors / fonts shared by both pages**: edit `lib/theme.js`.
+- **Tap page look**: edit `lib/page.js`.
+- **History page look, or how many days it shows**: edit `lib/history-page.js`
+  and the `DAYS_TO_SHOW` constant in `api/history.js`.
 - **Data**: everything lives in one Redis list (`worklog`). You can inspect
   or clear it from the Upstash console if you ever want to reset your
   history.

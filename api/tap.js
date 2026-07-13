@@ -45,6 +45,7 @@ module.exports = async (req, res) => {
     timeStr: zonedTimeString(now),
     dateStr: zonedDateDisplay(now),
     totalStr: formatDuration(totalMs),
+    key: providedKey,
   });
 
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
