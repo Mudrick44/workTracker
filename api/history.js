@@ -15,7 +15,13 @@ const LOG_KEY = 'worklog';
 // How many past days (with logged time) to show at most.
 const DAYS_TO_SHOW = 14;
 
-const redis = Redis.fromEnv();
+// Vercel's Upstash marketplace integration names these KV_REST_API_URL /
+// KV_REST_API_TOKEN (not the UPSTASH_REDIS_REST_* names Redis.fromEnv()
+// expects), so we build the client explicitly instead.
+const redis = new Redis({
+  url: process.env.KV_REST_API_URL,
+  token: process.env.KV_REST_API_TOKEN,
+});
 
 module.exports = async (req, res) => {
   const providedKey = req.query.key;

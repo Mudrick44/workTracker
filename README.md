@@ -42,12 +42,15 @@ Two endpoints:
 ### 2. Add Upstash Redis storage
 
 1. In your Vercel project, open the **Storage** tab.
-2. Choose **Upstash → Redis**, create a new database (or connect an existing
-   one), and follow the prompts to link it to this project.
-3. This automatically adds the Redis connection environment variables
-   (`UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN`) to your project,
-   which is what `Redis.fromEnv()` in `api/tap.js` reads. You don't need to
-   set these by hand.
+2. Choose **Upstash → Redis** (via the Marketplace integration), create a
+   new database, and connect it to this project. Leave the environment
+   selection at least on **Production** (Preview optional), and leave any
+   "custom prefix" field blank.
+3. This automatically adds Redis connection environment variables to your
+   project - `KV_REST_API_URL` and `KV_REST_API_TOKEN` - which is what
+   `api/tap.js` and `api/history.js` read. You don't need to set these by
+   hand. (If Vercel ever renames these, update the `new Redis({...})` call
+   near the top of both files to match.)
 
 ### 3. Set your secret key
 
